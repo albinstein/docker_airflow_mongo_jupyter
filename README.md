@@ -53,3 +53,16 @@ sudo docker exec proyecto_ra_airflow-webserver_1 airflow connections add 'mongod
   --conn-extra '{"authSource": "admin"}'
 ```
 
+<h4>Eliminacion de todos los contenedores del sistema en docker.</h4>
+
+Si el sistema esta corriendo y no tienes otros contenedores diferentes al despliegue, haz uso de este codigo, sino utilizalo para las secciones que creas convenientes. Requiere mas destresa en docker.
+
+```bash
+sudo docker stop $(sudo docker ps -aq) && \
+sudo docker rm $(sudo docker ps -aq) && \
+sudo docker rmi $(sudo docker images -aq) && \
+sudo docker network prune -f && \
+sudo docker volume prune -f && \
+sudo docker system prune -a -f && \
+sudo docker volume rm $(sudo docker volume ls -q)
+```
