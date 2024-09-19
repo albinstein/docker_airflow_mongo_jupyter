@@ -258,13 +258,12 @@ services:
     restart: always
 
   jupyter:
-    image: jupyter/base-notebook
-    user: root
+    image: jupyter/base-notebook:latest
+    user: jovyan
     command: >
       bash -c '
-        apt-get update && \
-        su jovyan -c "pip install --no-cache-dir $$${_PIP_ADDITIONAL_REQUIREMENTS}" && \
-        su jovyan -c "start-notebook.sh --NotebookApp.ip=\"0.0.0.0\" --NotebookApp.allow_origin=\"*\" --NotebookApp.allow_remote_access=True"
+        pip install --no-cache-dir $${_PIP_ADDITIONAL_REQUIREMENTS} && \
+        start-notebook.sh --NotebookApp.ip="0.0.0.0" --NotebookApp.allow_origin="*" --NotebookApp.allow_remote_access=True
       '
     volumes:
       - ./notebooks:/home/jovyan/work
