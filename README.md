@@ -1,51 +1,49 @@
-# Despliegue de Airflow-Mongodb-MongoExpress-Jupyter
+## Despliegue de Airflow, Mongodb, Mongo-Express y Jupyter
 Despliegue en docker para trabajar flujos de trabajos con airflow como creador de flujos, mongodb como almacenamiento y jupyter como notebooks de procesos.
 
-0) actualizamos el sistema.
+## <h3>Requerimientos minimos del sistema.</h3> 
+- 2 nucleos.
+- 4 GB Ram.
+- 30 GB de Almacenamiento.
+- OS Linux Ubuntu LTS 20.4
+- Ultima version de docker y docker-compose
 
-command:
-sudo apt update && sudo apt upgrade -y
+## Proceso de despliegue
+<h4>Clonamos repositorio en la carpeta de despliegue.</h4> 
 
-1) creamos un directorio o carpeta que se llame "proyecto_ra"
+```bash
+sudo apt update && sudo apt upgrade -y && \
+mkdir -p proyecto_ra && cd proyecto_ra && \
+git clone https://github.com/albinstein/docker_airflow_mongo_jupyter.git
+```
+<h4>Creamos las carpetas de las dependencias con sus respectivos permisos.</h4>
 
-command:
-mkdir -p proyecto_ra && cd proyecto_ra
-----------------------------------------------------------------
-
-2) dentro de la carpeta creada, creamos las carpetas dags, logs, plugins config notebooks  y notebooks/output
-tambien le damos permisos de acceso
-
-command:
+```bash
 mkdir -p dags logs plugins config notebooks notebooks/output
 chmod 777 dags logs plugins config notebooks notebooks/output
-----------------------------------------------------------------
+```
+<h4>(Opcional) Si deseamos ajustar alguna variable de entorno.</h4>
 
-3) crear los archivos docker-compose .env y init-mongo.js dentro de la carpeta
-
-command:
-touch docker-compose.yml .env init-mongo.js
-----------------------------------------------------------------
-
-4) copiamos y pegamos los datos del docker-compose que se hizo y lo mismo del .env y del init-mongo.js
-
-command:
+```bash
 sudo nano docker-compose.yml
 sudo nano .env
 sudo nano init-mongo.js
+# guardamos con ctrl+O, damos enter y luego salimos con ctrl+x, esto mismo repetimos para los demas
+```
 
-guardamos con ctrl+O, damos enter y luego salimos con ctrl+x, esto mismo repetimos para .env
-----------------------------------------------------------------
+<h4>Despliegue</h4>
 
-5)desplegamos:
+```bash
+#(Op1 mas recomendable) 
+sudo docker-compose up -d --build
 
-command:
-(Op1 mas recomendable) sudo docker-compose up -d --build
+#(Op2 se puede usar solo que es en serie) 
+sudo docker-compose build && sudo docker-compose up -d
+```
 
-(Op2 se puede usar solo que es en serie) sudo docker-compose build && sudo docker-compose up -d
+<h4>(Opcional) Si deseamos agregar el acceso de MongoDB a airflow.</h4>
 
-6) añadir la conexion de mongodb a airflow despues de haber instalado
-
-command:
+```bash
 sudo docker exec proyecto_ra_airflow-webserver_1 airflow connections add 'mongodb' \
   --conn-type 'mongodb' \
   --conn-host 'mongodb' \
@@ -53,4 +51,5 @@ sudo docker exec proyecto_ra_airflow-webserver_1 airflow connections add 'mongod
   --conn-login 'root' \
   --conn-password 'Llakcolnu1989' \
   --conn-extra '{"authSource": "admin"}'
+```
 
