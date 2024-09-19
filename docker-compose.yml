@@ -261,11 +261,11 @@ services:
     image: jupyter/base-notebook
     user: root
     command: >
-      bash -c "
+      bash -c '
         apt-get update && \
-        su jovyan -c 'pip install --no-cache-dir ${_PIP_ADDITIONAL_REQUIREMENTS_JUPYTER}' && \
-        su jovyan -c 'start-notebook.sh --NotebookApp.ip=\"0.0.0.0\" --NotebookApp.allow_origin=\"*\" --NotebookApp.allow_remote_access=True'
-      "
+        su jovyan -c "pip install --no-cache-dir $$${_PIP_ADDITIONAL_REQUIREMENTS}" && \
+        su jovyan -c "start-notebook.sh --NotebookApp.ip=\"0.0.0.0\" --NotebookApp.allow_origin=\"*\" --NotebookApp.allow_remote_access=True"
+      '
     volumes:
       - ./notebooks:/home/jovyan/work
     ports:
@@ -279,7 +279,7 @@ services:
       - airflow_network
     depends_on:
       - airflow-webserver
-    restart: always
+    #restart: always
 
 volumes:
   postgres-db-volume:
