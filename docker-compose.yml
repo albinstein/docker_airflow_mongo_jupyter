@@ -258,7 +258,7 @@ services:
     restart: always
 
   jupyter:
-    image: jupyter/base-notebook:latest
+    image: jupyter/base-notebook
     user: jovyan
     command: >
       bash -c '
