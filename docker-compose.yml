@@ -263,9 +263,7 @@ services:
     command: >
       bash -c "
         apt-get update && \
-        apt-get install -y --no-install-recommends pkg-config default-libmysqlclient-dev build-essential libssl-dev libffi-dev libblas-dev liblapack-dev libpq-dev libatlas-base-dev gfortran && \
-        rm -rf /var/lib/apt/lists/* && \
-        su jovyan -c 'pip install --no-cache-dir ${_PIP_ADDITIONAL_REQUIREMENTS}' && \
+        su jovyan -c 'pip install --no-cache-dir ${_PIP_ADDITIONAL_REQUIREMENTS_JUPYTER}' && \
         su jovyan -c 'start-notebook.sh --NotebookApp.ip=\"0.0.0.0\" --NotebookApp.allow_origin=\"*\" --NotebookApp.allow_remote_access=True'
       "
     volumes:
@@ -276,7 +274,7 @@ services:
       JUPYTER_ENABLE_LAB: "yes"
       JUPYTER_TOKEN: ${JUPYTER_TOKEN}
       JUPYTER_PASSWORD: ${JUPYTER_PASSWORD}
-      _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS}
+      _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS_JUPYTER}
     networks:
       - airflow_network
     depends_on:
