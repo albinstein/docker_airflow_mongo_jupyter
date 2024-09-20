@@ -11,7 +11,10 @@ Despliegue en docker para trabajar flujos de trabajos con airflow como creador d
 ## Proceso de despliegue
 <h4>Clonamos repositorio en la carpeta de despliegue.</h4> 
 
+Nota: hacer ajuste si se cambia el nombre del directorio "proyecto_ra" por otro nombre
+
 ```bash
+
 sudo apt update && sudo apt upgrade -y && \
 mkdir -p proyecto_ra && cd proyecto_ra && \
 git clone https://github.com/albinstein/docker_airflow_mongo_jupyter.git
@@ -46,11 +49,10 @@ sudo docker-compose build && sudo docker-compose up -d
 ```bash
 sudo docker exec proyecto_ra_airflow-webserver_1 airflow connections add 'mongodb' \
   --conn-type 'mongodb' \
-  --conn-host 'mongodb' \
+  --conn-host '192.168.1.73' \
   --conn-port 27017 \
   --conn-login 'root' \
-  --conn-password 'Llakcolnu1989' \
-  --conn-extra '{"authSource": "admin"}'
+  --conn-password 'Llakcolnu1989'
 ```
 
 <h4>Eliminacion de todos los contenedores del sistema en docker.</h4>

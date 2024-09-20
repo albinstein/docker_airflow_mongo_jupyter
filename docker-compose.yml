@@ -225,7 +225,7 @@ services:
         condition: service_completed_successfully
 
   mongo:
-    image: mongo:4.4.18
+    image: mongo:4.4.18 #Cambiar por la mas reciente cuando despues
     container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
@@ -257,28 +257,33 @@ services:
       - airflow_network
     restart: always
 
+
   jupyter:
-    image: jupyter/base-notebook
-    user: jovyan
-    command: >
-      bash -c '
-        pip install --no-cache-dir $${_PIP_ADDITIONAL_REQUIREMENTS} && \
-        start-notebook.sh --NotebookApp.ip="0.0.0.0" --NotebookApp.allow_origin="*" --NotebookApp.allow_remote_access=True
-      '
-    volumes:
-      - ./notebooks:/home/jovyan/work
-    ports:
-      - "8888:8888"
-    environment:
-      JUPYTER_ENABLE_LAB: "yes"
-      JUPYTER_TOKEN: ${JUPYTER_TOKEN}
-      JUPYTER_PASSWORD: ${JUPYTER_PASSWORD}
-      _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS_JUPYTER}
-    networks:
-      - airflow_network
-    depends_on:
-      - airflow-webserver
-    #restart: always
+      image: jupyter/base-notebook
+      user: jovyan
+      command: >
+        bash -c '
+          pip install --no-cache-dir $${_PIP_ADDITIONAL_REQUIREMENTS} && \
+          start-notebook.sh --NotebookApp.ip="0.0.0.0" --NotebookApp.allow_origin="*" --NotebookApp.allow_remote_access=True
+        '
+      volumes:
+        - ./notebooks:/home/jovyan/work/notebooks
+        - ./dags:/home/jovyan/work/dags
+        - ./logs:/home/jovyan/work/logs
+        - ./config:/home/jovyan/work/config
+        - ./plugins:/home/jovyan/work/plugins
+      ports:
+        - "8888:8888"
+      environment:
+        JUPYTER_ENABLE_LAB: "yes"
+        JUPYTER_TOKEN: ${JUPYTER_TOKEN}
+        JUPYTER_PASSWORD: ${JUPYTER_PASSWORD}
+        _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS_JUPYTER}
+      networks:
+        - airflow_network
+      depends_on:
+        - airflow-webserver
+      restart: always
 
 volumes:
   postgres-db-volume:
